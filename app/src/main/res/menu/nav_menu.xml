@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title="魔镜">
+        <menu>
+        <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_us"
+                    android:textSize="32sp"
+                    android:title="关于我们"
+                    android:icon="@drawable/me"
+                    />
+
+                <item
+                    android:id="@+id/nav_notice"
+                    android:textSize="32sp"
+                    android:title="通知中心"
+                    android:icon="@drawable/notify"/>
+
+                <item
+                    android:id="@+id/nav_feedback"
+                    android:textSize="32sp"
+                    android:title="用户反馈"
+                    android:icon="@drawable/feedback"/>
+
+                <item
+                    android:id="@+id/nav_log"
+                    android:textSize="32sp"
+                    android:title="更新日志"
+                    android:icon="@drawable/log"/>
+
+                <item
+                    android:id="@+id/nav_update"
+                    android:textSize="32sp"
+                    android:title="一件更新"
+                    android:icon="@drawable/update"/>
+
+                <item
+                    android:id="@+id/nav_switchaccount"
+                    android:textSize="32sp"
+                    android:title="退出账号"
+                    android:icon="@drawable/switchaccount"/>
+            </group>
+        </menu>
+    </item>
+
+
+
+
+</menu>

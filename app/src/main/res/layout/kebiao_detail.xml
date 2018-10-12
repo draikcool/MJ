@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    android:id="@+id/kebiao_detail"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TableRow>
+        <TextView
+            android:text="课程号："
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"
+            />
+
+        <TextView
+            android:id="@+id/detail_kch"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="课程教师："
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+
+        <TextView
+            android:id="@+id/detail_kcjs"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="教室："
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+
+        <TextView
+            android:id="@+id/detail_js"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:text="周次："
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+
+        <TextView
+            android:id="@+id/detail_zc"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"/>
+    </TableRow>
+
+
+</TableLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_course"
+        android:title="@string/menu_add_course"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/import_schedule"
+        android:title="@string/menu_import_schedule"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/change_semester"
+        android:title="@string/menu_change_semester"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/noshow"
+        android:title="@string/menu_noshow"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/add_date"
+        android:icon="@drawable/addicon"
+        app:showAsAction="always"
+        android:title="添加日程" />
+
+</menu>

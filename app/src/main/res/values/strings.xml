@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">魔镜</string>
+    <string name="menu_kebiao">课表</string>
+    <string name="menu_date">日程</string>
+    <string name="menu_monitor">监控</string>
+    <string name="menu_add_course">添加日程</string>
+    <string name="menu_import_schedule">导入课表</string>
+    <string name="menu_change_semester">更改学期</string>
+    <string name="menu_noshow">不上的课不显示</string>
+    <string name="menu_add_date">添加日程</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <string name="login_title">魔镜</string>
+    <string name="login_account">请输入账号</string>
+    <string name="login_password">请输入密码</string>
+    <string name="login_button">登陆</string>
+
+
+</resources>

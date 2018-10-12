@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_kebiao"
+        android:title="@string/menu_kebiao"
+        android:icon="@drawable/kebiao_normal"/>
+
+    <item
+        android:id="@+id/action_date"
+        android:title="@string/menu_date"
+        android:icon="@drawable/data_normal"/>
+
+    <item
+        android:id="@+id/action_monitor"
+        android:title="@string/menu_monitor"
+        android:icon="@drawable/monitor_normal"/>
+</menu>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/add_mood"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="记录心情"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/add_experience"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="生活经验"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/add_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="课堂笔记"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/add_backlog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="待办事项"
+        android:textSize="16sp"/>
+
+</LinearLayout>

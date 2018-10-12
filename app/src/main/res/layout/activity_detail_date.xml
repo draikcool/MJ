@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.hqb98.mj.DetailDate">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/detail_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重新编辑"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/detail_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="完成"
+            android:textColor="#f90000"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            android:gravity="right|center"
+            android:textSize="18sp"
+            android:layout_marginRight="15dp"/>
+
+        <ImageView
+            android:id="@+id/detail_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:src="@drawable/back" />
+
+    </android.support.v7.widget.Toolbar>
+
+
+
+    <EditText
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="日程名称"
+        android:textSize="18sp"
+        android:gravity="center|left"
+        android:layout_marginTop="25dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:minLines="2"
+        android:background="@android:color/white"/>
+
+    <EditText
+        android:id="@+id/detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="注意事项"
+        android:textSize="18sp"
+        android:minLines="5"
+        android:gravity="left"
+        android:layout_marginTop="25dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:background="@android:color/white"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/detail_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="删除"
+        android:textSize="14sp"
+        android:textColor="#fc1818"
+        android:background="#e6e6e6"/>
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ecebeb</color>
+    <color name="colorPrimaryDark">#c9c8c8</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="toolbarColor">#ffffffff</color>
+    <color name="navigationBarColor">#de004b</color>
+
+    <color name="tab_check">#ff0008</color>
+    <color name="black_word">#000000</color>
+    <color name="tab_uncheck">#000000</color>
+    <color name="login_button">#ff0000</color>
+</resources>
