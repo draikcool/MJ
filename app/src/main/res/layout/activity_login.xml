@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    tools:context=".activity.LoginActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <TextView
@@ -16,7 +16,6 @@
         android:text="@string/login_title"
         android:textColor="@color/black_word"
         android:textSize="30sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +30,7 @@
         android:id="@+id/login_account"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginTop="150dp"
         android:ems="10"
         android:hint="@string/login_account"
@@ -44,7 +43,7 @@
         android:id="@+id/login_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/login_password"
@@ -58,7 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
         android:text="记住密码"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline2"
@@ -75,10 +73,8 @@
         android:id="@+id/login_aotoLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="32dp"
         android:text="自动登陆"
-
         app:layout_constraintLeft_toRightOf="@id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/login_password" />
 
@@ -88,10 +84,10 @@
         android:id="@+id/login_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="登 陆"
         android:textStyle="bold"
@@ -106,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="164dp"
         android:text="账号："
         android:textSize="16sp"
@@ -120,14 +116,13 @@
         android:id="@+id/login_tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="34dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:text="密码："
-        android:textSize="16sp"
         android:textColor="@color/black_word"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline1"
-        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintRight_toLeftOf="@+id/login_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_tv1" />
@@ -138,8 +133,5 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/login_password"
         />
-
-
-
 
 </android.support.constraint.ConstraintLayout>

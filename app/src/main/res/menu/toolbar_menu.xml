@@ -2,29 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/add_course"
-        android:title="@string/menu_add_course"
+        android:id="@+id/menu_querykebiao"
+        android:title="@string/menu_querykebiao"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/import_schedule"
-        android:title="@string/menu_import_schedule"
+        android:title="@string/menu_updatekebiao"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/change_semester"
-        android:title="@string/menu_change_semester"
+        android:id="@+id/menu_choeesekebiao"
+        android:title="@string/menu_choeesekebiao"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/noshow"
-        android:title="@string/menu_noshow"
-        app:showAsAction="never" />
 
-    <item
-        android:id="@+id/add_date"
-        android:icon="@drawable/addicon"
-        app:showAsAction="always"
-        android:title="添加日程" />
+
 
 </menu>

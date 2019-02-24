@@ -9,11 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hqb98.mj.DetailDate;
+import com.example.hqb98.mj.activity.DetailDate;
 import com.example.hqb98.mj.R;
-import com.example.hqb98.mj.db.Date;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

@@ -1,13 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/ToolbarOverflow</item>
+        <item name="android:windowBackground">@color/gray_windowbackground</item>
+
     </style>
+
+
     <!--Dialog样式  暂时没用到-->
     <style name="Dialog" parent="android:style/Theme.Dialog">
         <!--背景颜色及透明度-->
@@ -22,8 +26,12 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
     <style name="ToolbarOverflow" parent="@android:style/Widget.ActionButton.Overflow">
-        <item name="android:src">@drawable/three_point</item>
+        <item name="android:src">@drawable/point</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
     </style>
+
 
 
 

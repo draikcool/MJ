@@ -14,4 +14,9 @@
         android:id="@+id/action_monitor"
         android:title="@string/menu_monitor"
         android:icon="@drawable/monitor_normal"/>
+
+    <item
+        android:id="@+id/action_me"
+        android:title="@string/menu_me"
+        android:icon="@drawable/me"/>
 </menu>

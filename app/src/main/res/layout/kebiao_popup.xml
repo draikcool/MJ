@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="7dp"
+        >
+        <ListView
+            android:id="@+id/kebiao_more_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <!--<LinearLayout-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--&gt;-->
+                <!--<TextView-->
+                    <!--android:id="@+id/kebiao_query"-->
+                    <!--android:text="查询课表"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textColor="@color/black_word"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginTop="6dp"-->
+                    <!--android:layout_marginBottom="6dp"/>-->
+            <!--</LinearLayout>-->
+
+
+            <!--<LinearLayout-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/kebiao_semester"-->
+                    <!--android:text="更改学期"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textColor="@color/black_word"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginTop="6dp"-->
+                    <!--android:layout_marginBottom="6dp"/>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:id="@+id/kebiao_choose"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--&gt;-->
+                <!--<TextView-->
+
+                    <!--android:text="选择周次"-->
+                    <!--android:textSize="18sp"-->
+                    <!--android:textColor="@color/black_word"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginTop="6dp"-->
+                    <!--android:layout_marginBottom="6dp"/>-->
+            <!--</LinearLayout>-->
+
+
+        <!--</LinearLayout>-->
+
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+</LinearLayout>

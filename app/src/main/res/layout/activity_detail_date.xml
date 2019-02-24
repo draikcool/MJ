@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.hqb98.mj.DetailDate">
+    tools:context="com.example.hqb98.mj.activity.DetailDate">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_detail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/toolbarColor"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:minHeight="?attr/actionBarSize">
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="重新编辑"
             android:textSize="18sp"
-            android:textColor="#000"
+            android:textColor="@color/white_word"
             android:layout_gravity="center"/>
 
         <Button

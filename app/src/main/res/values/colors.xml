@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ecebeb</color>
-    <color name="colorPrimaryDark">#c9c8c8</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#ff7d80</color>
+    <color name="colorAccent">#ff7d80</color>
+    <color name="bottomnavigation">#fff</color>
+    <color name="toolbarColor">#ff7d80</color>
+    <color name="navigationBarColor">#ff7d80</color>
 
-    <color name="toolbarColor">#ffffffff</color>
-    <color name="navigationBarColor">#de004b</color>
-
-    <color name="tab_check">#ff0008</color>
+    <color name="tab_check">#ff7d80</color>
     <color name="black_word">#000000</color>
-    <color name="tab_uncheck">#000000</color>
-    <color name="login_button">#ff0000</color>
+    <color name="white_word">#fff</color>
+    <color name="tab_uncheck">#c1c1c1</color>
+    <color name="top_tab_uncheck">#dfdfdf</color>
+    <color name="login_button">#ff7d80</color>
+    <color name="gray_windowbackground">#f4f4f4</color>
+    <color name="gray_background">#ececec</color>
+
+    <color name="kebiao_popup">#ff7d80</color>
 </resources>

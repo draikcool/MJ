@@ -3,17 +3,21 @@
     <string name="menu_kebiao">课表</string>
     <string name="menu_date">日程</string>
     <string name="menu_monitor">监控</string>
-    <string name="menu_add_course">添加日程</string>
-    <string name="menu_import_schedule">导入课表</string>
-    <string name="menu_change_semester">更改学期</string>
-    <string name="menu_noshow">不上的课不显示</string>
+    <string name="menu_me">我</string>
     <string name="menu_add_date">添加日程</string>
     <string name="title_activity_login">Sign in</string>
+
+    <string name="menu_querykebiao">导入课表</string>
+    <string name="menu_updatekebiao">更改学期</string>
+    <string name="menu_choeesekebiao">选择周次</string>
 
     <string name="login_title">魔镜</string>
     <string name="login_account">请输入账号</string>
     <string name="login_password">请输入密码</string>
     <string name="login_button">登陆</string>
 
+    <string name="kebiao_semester_1">第一学期</string>
+    <string name="kebiao_semester_2">第二学期</string>
+    <string name="semesteDate">2018-9-1</string>
 
 </resources>
