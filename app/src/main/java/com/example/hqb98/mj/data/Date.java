@@ -5,6 +5,7 @@ import org.litepal.crud.LitePalSupport;
 public class Date extends LitePalSupport{
     private int id;
     private int date_image;
+    private String date_id;
     private String date_type;
     private String date_title;
     private String date_content;
@@ -19,6 +20,15 @@ public class Date extends LitePalSupport{
 //        this.date_content = date_content;
 //        this.date_time = date_time;
 //    }
+
+
+    public String getDate_id() {
+        return date_id;
+    }
+
+    public void setDate_id(String date_id) {
+        this.date_id = date_id;
+    }
 
     public String getDate_title() {
         return date_title;

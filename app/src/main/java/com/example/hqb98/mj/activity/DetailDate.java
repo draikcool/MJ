@@ -2,51 +2,68 @@ package com.example.hqb98.mj.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.hqb98.mj.R;
 import com.example.hqb98.mj.data.Date;
+import com.example.hqb98.mj.util.HttpUtil;
 
 import org.litepal.LitePal;
 
+import java.io.IOException;
 import java.util.Calendar;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class DetailDate extends AppCompatActivity implements View.OnClickListener {
 
-    private Button complete;
+//    private Button complete;
+    private ImageView complete;
     private ImageView cancel;
     private EditText detail_title;
     private EditText detail_content;
-    private Button delete;
+//    private Button delete;
     private Intent intent;
     private Date date;
     private int position;
     private int id;
-
+    private FloatingActionButton delete;
+    private SharedPreferences sharedPreferences;
     private Calendar cal;
     private LocalBroadcastManager localBroadcastManager;
-
+    private String account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_date);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        account = sharedPreferences.getString("account","");
         initView();
 
     }
 
     private void initView() {
-        complete = (Button)findViewById(R.id.detail_update);
+//        complete = (Button)findViewById(R.id.detail_update);
+        complete = (ImageView)findViewById(R.id.detail_update);
         cancel = (ImageView)findViewById(R.id.detail_cancel);
         detail_title = (EditText)findViewById(R.id.detail_title);
         detail_content = (EditText)findViewById(R.id.detail_content);
-        delete = (Button)findViewById(R.id.detail_delete);
+        delete = (FloatingActionButton)findViewById(R.id.detail_delete);
+//        delete = (Button)findViewById(R.id.detail_delete);
         complete.setOnClickListener(this);
         cancel.setOnClickListener(this);
         delete.setOnClickListener(this);
@@ -66,17 +83,17 @@ public class DetailDate extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.detail_update:
-                StringBuilder sb = new StringBuilder();
-                sb.append(getMonth()).append(".").append(getDay()).append(" ").append(getWeek(Calendar.DAY_OF_WEEK)).append(" ").append(getHour()).append(":").append(getMinute());
-                date.setDate_time(sb.toString());
-                date.setDate_title(detail_title.getText().toString());
-                date.setDate_content(detail_content.getText().toString());
-                date.update(id);
-//                dateAdapter.updateData(position,date);
-                final Intent intent = new Intent("com.example.hqb98.mj.activity.DetailDate");
-                int[] extradata = new int[]{-1,position,id};
-                intent.putExtra("POSITION",extradata);
-                localBroadcastManager.sendBroadcast(intent);        //发送本地广播
+//                StringBuilder sb = new StringBuilder();
+//                sb.append(getMonth()).append(".").append(getDay()).append(" ").append(getWeek(Calendar.DAY_OF_WEEK)).append(" ").append(getHour()).append(":").append(getMinute());
+//                date.setDate_time(sb.toString());
+//                date.setDate_title(detail_title.getText().toString());
+//                date.setDate_content(detail_content.getText().toString());
+//                date.update(id);
+////                dateAdapter.updateData(position,date);
+//                final Intent intent = new Intent("com.example.hqb98.mj.activity.DetailDate");
+//                int[] extradata = new int[]{-1,position,id};
+//                intent.putExtra("POSITION",extradata);
+//                localBroadcastManager.sendBroadcast(intent);        //发送本地广播
                 finish();
                 break;
             case R.id.detail_delete:
@@ -86,11 +103,36 @@ public class DetailDate extends AppCompatActivity implements View.OnClickListene
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        LitePal.delete(Date.class,id);
-                        Intent intent1 =new Intent("com.example.hqb98.mj.activity.DetailDate");
-                        int[] extradata = new int[]{-2,position,id};
-                        intent1.putExtra("POSITION",extradata);
-                        localBroadcastManager.sendBroadcast(intent1);
+                        HttpUtil.deleteDateRequest(date.getDate_id(), account, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String responseData = response.body().string();
+                                Log.d("Detail",responseData);
+                                if (responseData.equals("\"true\"")){
+                                    Log.d("detail","detail,删除");
+                                    LitePal.delete(Date.class,id);
+                                    Intent intent1;
+                                    if (date.getDate_type().equals("记录心情")){
+                                        intent1 = new Intent("com.example.hqb98.mj.activity.detaildate.one");
+                                    }else if (date.getDate_type().equals("生活经验")){
+                                        intent1 = new Intent("com.example.hqb98.mj.activity.detaildate.two");
+                                    }else if (date.getDate_type().equals("课堂笔记")){
+                                        intent1 = new Intent("com.example.hqb98.mj.activity.detaildate.three");
+                                    }else {
+                                        intent1 = new Intent("com.example.hqb98.mj.activity.detaildate.four");
+                                    }
+                                    int[] extradata = new int[]{-2,position,id};
+                                    intent1.putExtra("POSITION",extradata);
+                                    localBroadcastManager.sendBroadcast(intent1);
+                                }
+                            }
+                        });
+//
                         finish();
                     }
                 });

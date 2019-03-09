@@ -1,5 +1,6 @@
 package com.example.hqb98.mj.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Instrumentation;
 import android.content.Context;
@@ -8,11 +9,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +35,11 @@ import com.example.hqb98.mj.activity.LoginActivity;
 import com.example.hqb98.mj.data.StudentInfo;
 import com.example.hqb98.mj.util.HttpUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MeFragment extends Fragment implements View.OnClickListener {
     private View view;
@@ -43,6 +54,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private LinearLayout qiehuanzhanghao;
     private LinearLayout tuichudenglu;
     private LinearLayout jianchagengxin;
+    private LinearLayout wodexinxi;
 //    private TextView temperature;
 //    private TextView humidity;
 //    private TextView smoke;
@@ -120,7 +132,8 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         String number = preferences.getString("account","");
         me_name.setText(name);
         me_number.setText("账号："+number);
-
+        wodexinxi = (LinearLayout)view.findViewById(R.id.me_wodexinxi);
+        wodexinxi.setOnClickListener(this);
 //        temperature = (TextView)view.findViewById(R.id.me_temperature);
 //        humidity = (TextView)view.findViewById(R.id.me_humidity);
 //        smoke = (TextView)view.findViewById(R.id.me_smoke);
@@ -131,7 +144,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.me_fankuigeikaifazhe:
                 if (isQQAvailable(getContext())){
-                    String url="mqqwpa://im/chat?chat_type=wpa&uin=2601407043";
+                    String url="mqqwpa://im/chat?chat_type=wpa&uin=996595179";
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 }else {
                     Toast.makeText(getContext(),"您未安装QQ",Toast.LENGTH_SHORT).show();
@@ -174,18 +187,64 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 });
                 break;
             case R.id.me_jianchagengxin:
-                Toast.makeText(getContext(),"现在已经是最新版本了哦",Toast.LENGTH_SHORT).show();
+                Log.d("mefragmentdd","dianji");
+                Toast.makeText(view.getContext(),"现在已经是最新版本了哦",Toast.LENGTH_SHORT).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(view.getContext(),"现在已经是最新版本了哦",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 break;
-//            case R.id.me_jiankongqingkuang:
-//                Intent intent1 = new Intent(getContext(),MeMonitor.class);
-//                startActivity(intent1);
-//
-//                break;
+            case R.id.me_wodexinxi:
+//                if (ContextCompat.checkSelfPermission(getContext(),Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},1);
+//                    Log.d("tongyilema","bushan");
+//                }else {
+//                    openCamera();
+//                }
+                break;
                 default:
 
                     break;
         }
     }
+    Uri imageUri;
+    public static final int TAKE_PHOTO = 123;
+    private void openCamera() {
+
+        try {
+            File outputImage = new File(getContext().getExternalCacheDir(),"attendence.jpg");
+            if (outputImage.exists()){
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+            if (Build.VERSION.SDK_INT>=24){
+                imageUri = FileProvider.getUriForFile(getContext(),"com.example.hqb98.aiattendance",outputImage);
+            }else{
+                imageUri = Uri.fromFile(outputImage);
+            }
+            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+            startActivityForResult(intent,TAKE_PHOTO);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case TAKE_PHOTO:
+                if (resultCode==RESULT_OK){
+                    Toast.makeText(getContext(),"paizhao",Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
     public static boolean isQQAvailable(Context context) {
         final PackageManager mPackageManager = context.getPackageManager();
         List<PackageInfo> pinfo = mPackageManager.getInstalledPackages(0);
@@ -198,5 +257,19 @@ public class MeFragment extends Fragment implements View.OnClickListener {
             }
         }
         return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 1:
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    openCamera();
+                }else {
+                    Toast.makeText(getContext(),"拒绝了权限可不能拍照哦！",Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+
     }
 }

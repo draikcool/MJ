@@ -7,9 +7,9 @@
     <string name="menu_add_date">添加日程</string>
     <string name="title_activity_login">Sign in</string>
 
-    <string name="menu_querykebiao">导入课表</string>
-    <string name="menu_updatekebiao">更改学期</string>
-    <string name="menu_choeesekebiao">选择周次</string>
+    <string name="menu_importschedule">导入课表</string>
+    <string name="menu_changesemester">更改学期</string>
+    <string name="menu_choeeseweek">选择周次</string>
 
     <string name="login_title">魔镜</string>
     <string name="login_account">请输入账号</string>

@@ -4,7 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,9 +31,11 @@ import com.shizhefei.fragment.LazyFragment;
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Date_item_fragment_four extends LazyFragment {
+public class Date_item_fragment_one extends LazyFragment {
+    public static final int LOAD_DATA = 123;
     private View view;
     public static RecyclerView recyclerView;
     public static List<Date> dateList = new ArrayList<>();
@@ -42,12 +47,32 @@ public class Date_item_fragment_four extends LazyFragment {
     private DetailReceiver detailReceiver;
     private IntentFilter intentFilter;
 
+    private Handler handler = new Handler(){
+        public void handleMessage(Message msg){
+            switch (msg.what){
+                case LOAD_DATA:
+                    initData1();
+//                    initData();
+                    initView1();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    protected View getPreviewLayout(LayoutInflater inflater, ViewGroup container) {
+        return inflater.inflate(R.layout.layout_preview,container,false);
+    }
+
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
         setContentView(R.layout.fragment_date_item);
-        initData1();
-        initView1();
+        //初始化在handle进行
+        Message message = new Message();
+        message.what = LOAD_DATA;
+        handler.sendEmptyMessageDelayed(message.what,500);
+
     }
 
     private void initView1() {
@@ -66,12 +91,34 @@ public class Date_item_fragment_four extends LazyFragment {
                 Intent intent = new Intent("com.example.hqb98.mj.activity.requestdate");
                 localBroadcastManager.sendBroadcast(intent);
                 refreshLayout.finishRefresh();//传入false表示刷新失败
+//                refreshDate();
+//                refreshData1();
             }
+
         });
         detailReceiver = new DetailReceiver();
         intentFilter = new IntentFilter();
-        intentFilter.addAction("com.example.hqb98.mj.activity.detaildate.four");
+        intentFilter.addAction("com.example.hqb98.mj.activity.detaildate.one");
         localBroadcastManager.registerReceiver(detailReceiver,intentFilter);
+
+    }
+
+    @Override
+    protected void onResumeLazy() {
+        super.onResumeLazy();
+//        refreshData1();
+    }
+
+    private void initData1(){
+
+        dateList.clear();
+        for (int i=0;i<DateFragmentOne.dateList.size();i++){
+            if (DateFragmentOne.dateList.get(i).getDate_type().equals("记录心情")){
+                dateList.add(DateFragmentOne.dateList.get(i));
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 
     //    @Nullable
@@ -83,19 +130,9 @@ public class Date_item_fragment_four extends LazyFragment {
 //        return view;
 //    }
 
-    private void initData1(){
-        dateList.clear();
-        for (int i=0;i<DateFragmentOne.dateList.size();i++){
-            if (DateFragmentOne.dateList.get(i).getDate_type().equals("待办事项")){
-                dateList.add(DateFragmentOne.dateList.get(i));
-            }
-        }
-        adapter.notifyDataSetChanged();
-    }
-
 //    private void initData() {
 //        dateList.clear();
-//        dateList.addAll(LitePal.where("date_type = '待办事项'").order("id desc").find(Date.class));
+//        dateList.addAll(LitePal.where("date_type = '记录心情'").order("id desc").find(Date.class));
 //        Log.d("dateList",dateList.size()+" changdu");
 //
 //    }
@@ -119,23 +156,26 @@ public class Date_item_fragment_four extends LazyFragment {
 //                refreshDate();
 //            }
 //        });
+//
 //    }
+
+
 
     public static void refreshData1(){
         dateList.clear();
         for (int i=0;i<DateFragmentOne.dateList.size();i++){
-            if (DateFragmentOne.dateList.get(i).getDate_type().equals("待办事项")){
+            if (DateFragmentOne.dateList.get(i).getDate_type().equals("记录心情")){
+                Log.d("date_itemtt","记录ss");
                 dateList.add(DateFragmentOne.dateList.get(i));
             }
         }
-//        Collections.reverse(dateList);
-
+//        checkLength();
         adapter.notifyDataSetChanged();
     }
 
 //    public static void refreshDate(){
 //        List<Date> dates = new ArrayList<>();
-//        dates.addAll(LitePal.where("date_type = '待办事项'").order("id desc").find(Date.class));
+//        dates.addAll(LitePal.where("date_type = '记录心情'").order("id desc").find(Date.class));
 //        if (dates.size()!=0){
 //            dateList.clear();
 //            dateList.addAll(dates);
@@ -143,9 +183,6 @@ public class Date_item_fragment_four extends LazyFragment {
 //            adapter.notifyDataSetChanged();
 //        }
 //    }
-
-
-
 
     public static void checkLength(){
         if (dateList.size()<=0){
@@ -156,7 +193,6 @@ public class Date_item_fragment_four extends LazyFragment {
             recyclerView.setVisibility(View.VISIBLE);
         }
     }
-
 
     public  class DetailReceiver extends BroadcastReceiver {
 
@@ -170,7 +206,6 @@ public class Date_item_fragment_four extends LazyFragment {
 
                 dateList.set(i[1],date);
             }else if (i[0]==-2){
-                Log.d("datefragment","进来了吗");
                 dateList.remove(i[1]);
                 adapter.notifyItemRemoved(i[1]);
 //                adapter.notifyItemRangeChanged(i[1],dateList.size()-i[1]);

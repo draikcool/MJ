@@ -18,11 +18,15 @@ import android.widget.TextView;
 
 import com.example.hqb98.mj.R;
 import com.example.hqb98.mj.data.Date;
+import com.example.hqb98.mj.fragment.DateFragmentOne;
 import com.example.hqb98.mj.util.HttpUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,7 +38,7 @@ public class CreatDate extends AppCompatActivity implements View.OnClickListener
     private Button complete_button;
     private EditText activityName;
     private EditText activityAttention;
-    static final int COLOR1= Color.parseColor("#f90000");
+    static final int COLOR1= Color.parseColor("#ffffff");
     static final int COLOR2= Color.parseColor("#ff9393");
     static java.util.Calendar cal;
     private TextView subTitle;
@@ -132,32 +136,44 @@ public class CreatDate extends AppCompatActivity implements View.OnClickListener
                     public void onResponse(Call call, Response response) throws IOException {
                         String responseData = response.body().string();
                         Log.d("createdsds",responseData);
-                        if (responseData.equals("\"true\"")){
-                            cal = java.util.Calendar.getInstance();
-                            int i = cal.get(java.util.Calendar.DAY_OF_WEEK);
-                            String week = getWeek(i);
-                            StringBuffer date_time = new StringBuffer();
-                            date_time.append(getMonth()).append(".").append(getDay()).append(" ").append(week).append(" ").append(getHour()).append(":").append(getMinute());
-                            Date date = new Date();//数据库关联类
-                            date.setDate_image(date_image);
-                            date.setDate_type(subTitle.getText().toString());
-                            date.setDate_title(activityName.getText().toString());
-                            date.setDate_content(activityAttention.getText().toString());
-                            date.setDate_time(date_time.toString());
-                            date.save();
-                            Intent intent = new Intent();
-                            intent.putExtra("Add_Date","ADD_DATE");
-                            setResult(RESULT_OK,intent);
-                            finish();
-                        }else{
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(CreatDate.this);
-                                    builder.setMessage("网络出现了一点小问题哦~");
-                                    builder.show();
-                                }
-                            });
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            if (jsonObject.getString("status").equals("true")){
+                                cal = java.util.Calendar.getInstance();
+                                int i = cal.get(java.util.Calendar.DAY_OF_WEEK);
+                                String week = getWeek(i);
+//                                StringBuffer date_time = new StringBuffer();
+//                                date_time.append(getMonth()).append(".").append(getDay()).append(" ").append(week).append(" ").append(getHour()).append(":").append(getMinute());
+                                long currentTime = System.currentTimeMillis();
+                                String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(currentTime);
+                                Date date = new Date();//数据库关联类
+                                date.setDate_image(date_image);
+                                date.setDate_type(subTitle.getText().toString());
+                                date.setDate_title(activityName.getText().toString());
+                                date.setDate_content(activityAttention.getText().toString());
+                                date.setDate_time(timeNow.toString());
+                                date.setDate_id(jsonObject.getString("id"));
+                                date.save();
+                                DateFragmentOne.dateList.add(0,date);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("Date_type",subTitle.getText().toString());
+                                bundle.putString("Add_Date","ADD_DATE");
+                                Intent intent = new Intent();
+                                intent.putExtras(bundle);
+                                setResult(RESULT_OK,intent);
+                                finish();
+                            }else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(CreatDate.this);
+                                        builder.setMessage("网络出现了一点小问题哦~");
+                                        builder.show();
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
                     }

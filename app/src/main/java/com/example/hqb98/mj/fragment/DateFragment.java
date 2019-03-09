@@ -252,27 +252,27 @@ public class DateFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            int[] i = intent.getIntArrayExtra("POSITION");
-
-            if (i[0]==-1){
-                int id = i[2];
-                Date date = LitePal.find(Date.class,id);
-
-                dateList.set(i[1],date);
-                adapter.notifyItemChanged(i[1]);
-            }else if (i[0]==-2){
-                int id=i[2];
-                LitePal.delete(Date.class,id);
-                dateList.remove(i[1]);
-                if (dateList.size()==0){
-                    kongkongruye.setVisibility(View.VISIBLE);
-                }else {
-                    kongkongruye.setVisibility(View.GONE);
-                }
-                adapter.notifyItemRemoved(i[1]);
-                adapter.notifyItemRangeChanged(i[1],dateList.size()-i[1]);
-                adapter.notifyDataSetChanged();
-            }
+//            int[] i = intent.getIntArrayExtra("POSITION");
+//
+//            if (i[0]==-1){
+//                int id = i[2];
+//                Date date = LitePal.find(Date.class,id);
+//
+//                dateList.set(i[1],date);
+//                adapter.notifyItemChanged(i[1]);
+//            }else if (i[0]==-2){
+//                int id=i[2];
+//                LitePal.delete(Date.class,id);
+//                dateList.remove(i[1]);
+//                if (dateList.size()==0){
+//                    kongkongruye.setVisibility(View.VISIBLE);
+//                }else {
+//                    kongkongruye.setVisibility(View.GONE);
+//                }
+//                adapter.notifyItemRemoved(i[1]);
+//                adapter.notifyItemRangeChanged(i[1],dateList.size()-i[1]);
+//                adapter.notifyDataSetChanged();
+//            }
         }
     }
 

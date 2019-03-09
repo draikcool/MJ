@@ -53,15 +53,6 @@ public class HttpUtil {
         return new Gson().fromJson(string,StudentInfo.class);
     }
 
-    public static void sendSensorRequest(String url,okhttp3.Callback callback){
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(callback);
-
-    }
 
     public static void uploadDateRequest(String userid,String type,String title,String content,String datetime,String remindtime,okhttp3.Callback callback){
         String path = "http://101.132.169.177/magicmirror/genxin/get_memo.php?";
@@ -89,6 +80,33 @@ public class HttpUtil {
     public static void getDateRequest(String userid,okhttp3.Callback callback){
         String path = "http://101.132.169.177/magicmirror/genxin/memo1.php?userid=";
         String url = path + userid;
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void deleteDateRequest(String id,String account,okhttp3.Callback callback){
+        String url = "http://101.132.169.177/magicmirror/genxin/delete_memo.php?id="+id+"&userid="+account;
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void getSensorRequest(okhttp3.Callback callback){
+        String url = "http://101.132.169.177/magicmirror/genxin/sensor.php";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void getSensorAll(okhttp3.Callback callback){
+        String url = "http://101.132.169.177/magicmirror/genxin/sensor_all.php";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

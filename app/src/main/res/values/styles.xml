@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionOverflowButtonStyle">@style/ToolbarOverflow</item>
+        <!--<item name="actionOverflowButtonStyle">@style/ToolbarOverflow</item>-->
         <item name="android:windowBackground">@color/gray_windowbackground</item>
 
     </style>
@@ -25,11 +25,14 @@
         <!--是否模糊-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>
-    <style name="ToolbarOverflow" parent="@android:style/Widget.ActionButton.Overflow">
-        <item name="android:src">@drawable/point</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">10dp</item>
+    <!--<style name="ToolbarOverflow" parent="@android:style/Widget.ActionButton.Overflow">-->
+        <!--<item name="android:background">@drawable/point</item>-->
+    <!--</style>-->
+
+    <style name="Widget.MJ.Button" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
     </style>
 
 

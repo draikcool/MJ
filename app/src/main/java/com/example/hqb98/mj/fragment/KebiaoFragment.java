@@ -13,7 +13,9 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -21,6 +23,9 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -36,6 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.hqb98.mj.R;
 import com.example.hqb98.mj.data.Corse;
@@ -56,6 +62,7 @@ import okhttp3.Response;
 
 public class KebiaoFragment extends Fragment implements View.OnClickListener {
     private View view;
+    private android.support.v7.widget.Toolbar toolbar;
     private RelativeLayout relativeLayouts[];
     private LinearLayout linearLayout0;
     private ArrayList<Corse> corses;
@@ -102,6 +109,13 @@ public class KebiaoFragment extends Fragment implements View.OnClickListener {
         windowHeight = displayMetrics.heightPixels;
         windowWidth = displayMetrics.widthPixels;
         Log.d("windowsize",windowWidth+"kuan"+windowHeight+"gao");
+        setHasOptionsMenu(true);
+    }
+
+    public void initToolbar(android.support.v7.widget.Toolbar toolbar) {
+        AppCompatActivity appCompatActivity= (AppCompatActivity) getActivity();
+        appCompatActivity.setSupportActionBar(toolbar);
+        ActionBar actionBar = appCompatActivity.getSupportActionBar();
     }
 
     @Nullable
@@ -115,10 +129,12 @@ public class KebiaoFragment extends Fragment implements View.OnClickListener {
         progressBar = (ProgressBar)view.findViewById(R.id.kebiao_progressbar);
         progressBar.setVisibility(View.GONE);
         initView();
+        initToolbar(toolbar);
         return view;
     }
 
     private void initView() {
+        toolbar = (android.support.v7.widget.Toolbar)view.findViewById(R.id.toolbar1);
         corses = new ArrayList<Corse>();
         corses.addAll(LitePal.findAll(Corse.class));
         if (corses.size()!=0){
@@ -127,156 +143,217 @@ public class KebiaoFragment extends Fragment implements View.OnClickListener {
         }else {
             sendReqest();
         }
-        more = (ImageView)view.findViewById(R.id.kebiao_more);
-        more.setOnClickListener(this);
+//        more = (ImageView)view.findViewById(R.id.kebiao_more);
+//        more.setOnClickListener(this);
         kebiao_view = (TextView)view.findViewById(R.id.kebiao_view);
         kebiao_view.setText("第"+getWeeks()+"周");
         kebiao_view.setOnClickListener(this);
-        pop = getActivity().getLayoutInflater().inflate(R.layout.kebiao_popup,null);
-        String[] data = {"导入课表","更改学期","选择周次"};
-        listView1 = (ListView)pop.findViewById(R.id.kebiao_more_list);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(pop.getContext(),android.R.layout.simple_list_item_1,data);
-        listView1.setAdapter(adapter);
-        listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
-                        sendReqest();
-                        kebiao_view.setText("第"+getWeeks()+"周");
-                        break;
-                    case 1:
-                        final LinearLayout popup = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.kebiao_semester,null);
-                        for (int i=0;i<9;i++){
-                            buttons[i] = (Button)popup.findViewById(ids[i]);
-                            buttons[i].setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    switch (v.getId()){
-                                        case R.id.kebiao_semester_change_1:
-                                            setSelect();
-                                            buttons[0].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_2:
-                                            setSelect();
-                                            buttons[1].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_3:
-                                            setSelect();
-                                            buttons[2].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_4:
-                                            setSelect();
-                                            buttons[3].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_5:
-                                            setSelect();
-                                            buttons[4].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_6:
-                                            setSelect();
-                                            buttons[5].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_7:
-                                            setSelect();
-                                            buttons[6].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_8:
-                                            setSelect();
-                                            buttons[7].setSelected(true);
-                                            break;
-                                        case R.id.kebiao_semester_change_9:
-                                            setSelect();
-                                            buttons[8].setSelected(true);
-                                            break;
-                                    }
-                                }
-                            });
-                        }
-                        final AlertDialog.Builder dialog= new AlertDialog.Builder(getContext());
-                        dialog.setView(popup)
-                                .create()
-                                .show();
-                        Button ok = (Button)popup.findViewById(R.id.kebiao_semester_change_ok);
-                        ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (buttons[0].isSelected()){
-                                    editor.putString("semester","2014-2015-1");
-                                    editor.apply();
-                                }else if (buttons[1].isSelected()){
-                                    editor.putString("semester","2014-2015-2");
-                                    editor.apply();
-                                }else if (buttons[2].isSelected()){
-                                    editor.putString("semester","2015-2016-1");
-                                    editor.apply();
-                                }else if (buttons[3].isSelected()){
-                                    editor.putString("semester","2015-2016-2");
-                                    editor.apply();
-                                }else if (buttons[4].isSelected()){
-                                    editor.putString("semester","2016-2017-1");
-                                    editor.apply();
-                                }else if (buttons[5].isSelected()){
-                                    editor.putString("semester","2016-2017-2");
-                                    editor.apply();
-                                }else if (buttons[6].isSelected()){
-                                    editor.putString("semester","2017-2018-1");
-                                    editor.apply();
-                                }else if (buttons[7].isSelected()){
-                                    editor.putString("semester","2017-2018-2");
-                                    editor.apply();
-                                }else if (buttons[8].isSelected()){
-                                    editor.putString("semester","2018-2019-1");
-                                    editor.apply();
-                                }
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Instrumentation inst = new Instrumentation();
-                                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-                                        Message message = new Message();
-                                        message.what = 123;
-                                        handler1.sendMessage(message);
+//        pop = getActivity().getLayoutInflater().inflate(R.layout.kebiao_popup,null);
+//        String[] data = {"导入课表","更改学期","选择周次"};
+//        listView1 = (ListView)pop.findViewById(R.id.kebiao_more_list);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(pop.getContext(),android.R.layout.simple_list_item_1,data);
+//        listView1.setAdapter(adapter);
+//        listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                switch (position){
+//                    case 0:
+//                        sendReqest();
+//                        kebiao_view.setText("第"+getWeeks()+"周");
+//                        break;
+//                    case 1:
+//                        final LinearLayout popup = (LinearLayout)getActivity().getLayoutInflater().inflate(R.layout.kebiao_semester,null);
+//                        for (int i=0;i<9;i++){
+//                            buttons[i] = (Button)popup.findViewById(ids[i]);
+//                            buttons[i].setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    switch (v.getId()){
+//                                        case R.id.kebiao_semester_change_1:
+//                                            setSelect();
+//                                            buttons[0].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_2:
+//                                            setSelect();
+//                                            buttons[1].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_3:
+//                                            setSelect();
+//                                            buttons[2].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_4:
+//                                            setSelect();
+//                                            buttons[3].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_5:
+//                                            setSelect();
+//                                            buttons[4].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_6:
+//                                            setSelect();
+//                                            buttons[5].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_7:
+//                                            setSelect();
+//                                            buttons[6].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_8:
+//                                            setSelect();
+//                                            buttons[7].setSelected(true);
+//                                            break;
+//                                        case R.id.kebiao_semester_change_9:
+//                                            setSelect();
+//                                            buttons[8].setSelected(true);
+//                                            break;
+//                                    }
+//                                }
+//                            });
+//                        }
+//                        final AlertDialog.Builder dialog= new AlertDialog.Builder(getContext());
+//                        dialog.setView(popup)
+//                                .create()
+//                                .show();
+//                        Button ok = (Button)popup.findViewById(R.id.kebiao_semester_change_ok);
+//                        ok.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                if (buttons[0].isSelected()){
+//                                    editor.putString("semester","2014-2015-1");
+//                                    editor.apply();
+//                                }else if (buttons[1].isSelected()){
+//                                    editor.putString("semester","2014-2015-2");
+//                                    editor.apply();
+//                                }else if (buttons[2].isSelected()){
+//                                    editor.putString("semester","2015-2016-1");
+//                                    editor.apply();
+//                                }else if (buttons[3].isSelected()){
+//                                    editor.putString("semester","2015-2016-2");
+//                                    editor.apply();
+//                                }else if (buttons[4].isSelected()){
+//                                    editor.putString("semester","2016-2017-1");
+//                                    editor.apply();
+//                                }else if (buttons[5].isSelected()){
+//                                    editor.putString("semester","2016-2017-2");
+//                                    editor.apply();
+//                                }else if (buttons[6].isSelected()){
+//                                    editor.putString("semester","2017-2018-1");
+//                                    editor.apply();
+//                                }else if (buttons[7].isSelected()){
+//                                    editor.putString("semester","2017-2018-2");
+//                                    editor.apply();
+//                                }else if (buttons[8].isSelected()){
+//                                    editor.putString("semester","2018-2019-1");
+//                                    editor.apply();
+//                                }
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Instrumentation inst = new Instrumentation();
+//                                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+//                                        Message message = new Message();
+//                                        message.what = 123;
+//                                        handler1.sendMessage(message);
+//
+//                                    }
+//                                }).start();
+//
+//
+//
+//                            }
+//                        });
+//                        final Button cancel = (Button)popup.findViewById(R.id.kebiao_semester_change_cancel);
+//                        cancel.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Instrumentation inst = new Instrumentation();
+//                                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+//                                    }
+//                                }).start();
+//                            }
+//                        });
+//                        break;
+//                    case 2:
+//                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+//                        builder1.setTitle("请选择周次");
+//                        String[] weekss = getResources().getStringArray(R.array.weeks);
+//                        builder1.setItems(weekss, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                choose_week(corses,which+1);
+//                                kebiao_view.setText("第"+(which+1)+"周");
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        builder1.create().show();
+//                        break;
+//                }
+//            }
+//        });
 
-                                    }
-                                }).start();
+    }
 
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-                            }
-                        });
-                        final Button cancel = (Button)popup.findViewById(R.id.kebiao_semester_change_cancel);
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Instrumentation inst = new Instrumentation();
-                                        inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
-                                    }
-                                }).start();
-                            }
-                        });
-                        break;
-                    case 2:
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                        builder1.setTitle("请选择周次");
-                        String[] weekss = getResources().getStringArray(R.array.weeks);
-                        builder1.setItems(weekss, new DialogInterface.OnClickListener() {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.toolbar_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_importschedule:
+                sendReqest();
+                kebiao_view.setText("第"+getWeeks()+"周");
+                break;
+            case R.id.menu_changesemester:
+                String str = preferences.getString("account","");
+                String semester = str.substring(0,2);
+                int j = calendar.get(Calendar.YEAR)-Integer.parseInt("20"+semester);
+                if (calendar.get(Calendar.MONTH)>=8){
+                    j = j+1;
+                }
+                final String[] semesters = new String[(j)*2];
+                for (int i = 0;i < j;i++){
+                    semesters[i*2] = (calendar.get(Calendar.YEAR)-i-1)+"-"+(calendar.get(Calendar.YEAR)-i)+"-2";
+                    semesters[i*2+1] = (calendar.get(Calendar.YEAR)-i-1)+"-"+(calendar.get(Calendar.YEAR)-i)+"-1";
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("选择学期")
+                        .setItems(semesters, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                choose_week(corses,which+1);
-                                kebiao_view.setText("第"+(which+1)+"周");
+                                editor.putString("semester",semesters[which]);
+                                editor.apply();
+                                Message message = new Message();
+                                message.what = SEND_REQUEST;
+                                handler1.sendMessage(message);
                                 dialog.dismiss();
+
                             }
                         });
-                        builder1.create().show();
-                        break;
-                }
-            }
-        });
-
+                builder.create().show();
+                break;
+            case R.id.menu_choeesekebiao:
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                builder1.setTitle("请选择周次");
+                String[] weekss = getResources().getStringArray(R.array.weeks);
+                builder1.setItems(weekss, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        choose_week(corses,which+1);
+                        kebiao_view.setText("第"+(which+1)+"周");
+                        dialog.dismiss();
+                    }
+                });
+                builder1.create().show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private String getWeeks() {
@@ -313,17 +390,17 @@ public class KebiaoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.kebiao_more:
-                int result = 0;
-                int resourceId = getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
-                if (resourceId > 0){
-                    result = getContext().getResources().getDimensionPixelSize(resourceId);
-                }
-                final PopupWindow popupWindow = new PopupWindow(pop,600,400);
-                popupWindow.setBackgroundDrawable(new BitmapDrawable());
-                popupWindow.setOutsideTouchable(true);
-                popupWindow.showAtLocation(more,Gravity.END|Gravity.TOP,0,result);
-                break;
+//            case R.id.kebiao_more:
+//                int result = 0;
+//                int resourceId = getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+//                if (resourceId > 0){
+//                    result = getContext().getResources().getDimensionPixelSize(resourceId);
+//                }
+//                final PopupWindow popupWindow = new PopupWindow(pop,600,400);
+//                popupWindow.setBackgroundDrawable(new BitmapDrawable());
+//                popupWindow.setOutsideTouchable(true);
+//                popupWindow.showAtLocation(more,Gravity.END|Gravity.TOP,0,result);
+//                break;
             case R.id.kebiao_view:
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                 builder1.setTitle("请选择周次");
@@ -338,42 +415,42 @@ public class KebiaoFragment extends Fragment implements View.OnClickListener {
                 });
                 builder1.create().show();
                 break;
-            case R.id.kebiao_semester_change_1:
-                setSelect();
-                buttons[0].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_2:
-                setSelect();
-                buttons[1].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_3:
-                setSelect();
-                buttons[2].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_4:
-                setSelect();
-                buttons[3].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_5:
-                setSelect();
-                buttons[4].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_6:
-                setSelect();
-                buttons[5].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_7:
-                setSelect();
-                buttons[6].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_8:
-                setSelect();
-                buttons[7].setSelected(true);
-                break;
-            case R.id.kebiao_semester_change_9:
-                setSelect();
-                buttons[8].setSelected(true);
-                break;
+//            case R.id.kebiao_semester_change_1:
+//                setSelect();
+//                buttons[0].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_2:
+//                setSelect();
+//                buttons[1].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_3:
+//                setSelect();
+//                buttons[2].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_4:
+//                setSelect();
+//                buttons[3].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_5:
+//                setSelect();
+//                buttons[4].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_6:
+//                setSelect();
+//                buttons[5].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_7:
+//                setSelect();
+//                buttons[6].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_8:
+//                setSelect();
+//                buttons[7].setSelected(true);
+//                break;
+//            case R.id.kebiao_semester_change_9:
+//                setSelect();
+//                buttons[8].setSelected(true);
+//                break;
 
         }
     }
@@ -386,14 +463,17 @@ public class KebiaoFragment extends Fragment implements View.OnClickListener {
 
     private void sendReqest(){
 //        progressBar.setVisibility(View.VISIBLE);
+        /**
+         * 这里需要手动设置一下
+         */
         String account = preferences.getString("account","");
         String password = preferences.getString("password","");
         String semester = preferences.getString("semester","2018-2019-1");
+        Log.d("kebiao",account+"  "+password+"  "+semester);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("努力加载中，请稍后~");
         builder.create().show();
         HttpUtil.getCourseRequest(account,password,semester ,new okhttp3.Callback(){
-
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("getCourse",e.toString());

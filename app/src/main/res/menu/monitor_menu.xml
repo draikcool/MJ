@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/monitor_alarm"
+        android:title="开启报警"
+        app:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/monitor_noalarm"
+        android:title="关闭报警"
+        app:showAsAction="never">
+    </item>
+
+</menu>

@@ -2,10 +2,11 @@
 <litepal>
     <dbname value="MoJing"></dbname>
 
-    <version value="3"></version>
+    <version value="6"></version>
     <list>
         <mapping class="com.example.hqb98.mj.data.Date"></mapping>
         <mapping class="com.example.hqb98.mj.data.Corse"></mapping>
+        <mapping class="com.example.hqb98.mj.data.Picture"></mapping>
     </list>
 
 </litepal>

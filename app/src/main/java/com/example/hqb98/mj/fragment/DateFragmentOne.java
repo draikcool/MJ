@@ -1,8 +1,10 @@
 package com.example.hqb98.mj.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +35,9 @@ import com.example.hqb98.mj.data.DateHttp;
 import com.example.hqb98.mj.util.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
@@ -42,13 +48,16 @@ import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class DateFragmentOne extends Fragment implements View.OnClickListener {
+import static android.app.Activity.RESULT_OK;
+
+public class DateFragmentOne extends LazyFragment implements View.OnClickListener {
 
     public static final int TOAST = 123;
     public static final int UPDATE_DATE = 1234;
@@ -60,6 +69,17 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
     private SharedPreferences preferences;
     private ImageView add_date;
     private List<DateHttp> dateHttps = new ArrayList<DateHttp>();
+    public static List<Date> dateList = new ArrayList<>();
+    private RequestDateReceiver requestDateReceiver;
+    private LocalBroadcastManager localBroadcastManager;
+    private IntentFilter intentFilter;
+
+
+
+    private Fragment fragment1;
+    private Fragment fragment2;
+    private Fragment fragment3;
+    private Fragment fragment4;
 
 
 
@@ -70,29 +90,62 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
                     Toast.makeText(getContext(),"网络出现了一点小问题哦~",Toast.LENGTH_SHORT).show();
                     break;
                 case UPDATE_DATE:
-//                    addData();
                     break;
             }
         }
 
     };
-    @Nullable
+
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.date_layout_one,container,false);
+    protected void onCreateViewLazy(Bundle savedInstanceState) {
+        super.onCreateViewLazy(savedInstanceState);
+        setContentView(R.layout.date_layout_one);
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         initData();
-        initView();
+        initView1();
         initEvent();
-
-        return view;
     }
+
+    private void initView1() {
+        indicator = (Indicator)findViewById(R.id.date_indicator);
+        viewPager = (ViewPager)findViewById(R.id.date_viewpager);
+        //设置tab上的字体和颜色
+        Resources resources = getResources();
+        float size = 16;
+        int selectColor = resources.getColor(R.color.white_word);
+        int unSelectColor = resources.getColor(R.color.top_tab_uncheck);
+        viewPager.setOffscreenPageLimit(4);
+        indicator.setScrollBar(new ColorBar(getContext(),Color.WHITE,5,ScrollBar.Gravity.BOTTOM));
+        indicator.setOnTransitionListener(new OnTransitionTextListener().setSize(size,size).setColor(selectColor,unSelectColor));
+        indicatorViewPager = new IndicatorViewPager(indicator,viewPager);
+        indicatorViewPager.setAdapter(new MyAdapter(getActivity().getSupportFragmentManager(),getContext()));
+        add_date = (ImageView)findViewById(R.id.add_date);
+        requestDateReceiver = new RequestDateReceiver();
+        localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.hqb98.mj.activity.requestdate");
+        localBroadcastManager.registerReceiver(requestDateReceiver,intentFilter);
+
+    }
+
+//    @Nullable
+//    @Override
+//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        view = inflater.inflate(R.layout.date_layout_one,container,false);
+//        preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//        initData();
+//        initView();
+//        initEvent();
+//
+//        return view;
+//    }
 
     private void initData() {
         requestData();
     }
 
-    private void requestData() {
+    public  void requestData() {
         String userid = preferences.getString("account","");
         Log.d("getDate",userid);
         HttpUtil.getDateRequest(userid, new Callback() {
@@ -112,12 +165,14 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
                 dateHttps = gson.fromJson(responseData,new TypeToken<List<DateHttp>>(){}.getType());
                 if (dateHttps.size()!=0){
                     LitePal.deleteAll(Date.class);
+                    dateList.clear();
                     for (int i=0;i<dateHttps.size();i++){
                         Date date = new Date();
                         date.setDate_type(dateHttps.get(i).getType());
                         date.setDate_title(dateHttps.get(i).getTitle());
                         date.setDate_content(dateHttps.get(i).getContent());
                         date.setDate_time(dateHttps.get(i).getDatetime());
+                        date.setDate_id(dateHttps.get(i).getId());
                         switch (dateHttps.get(i).getType()){
                             case "记录心情":
                                 date.setDate_image(R.drawable.mood);
@@ -133,11 +188,29 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
                                 break;
                         }
                         date.save();
+                        dateList.add(0,date);
                     }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Date_item_fragment_one.refreshData1();
+                            if (fragment2!=null){
+                                Date_item_fragment_two.refreshData1();
+                            }
+                            if (fragment3!=null){
+                                Date_item_fragment_three.refreshData1();
+                            }
+                            if (fragment4!=null){
+                                Date_item_fragment_four.refreshData1();
+                            }
 
-                    Message message = new Message();
-                    message.what = UPDATE_DATE;
-                    handler.sendMessage(message);
+                        }
+                    });
+
+
+//                    Message message = new Message();
+//                    message.what = UPDATE_DATE;
+//                    handler.sendMessage(message);
                 }
 
             }
@@ -159,11 +232,16 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
         indicatorViewPager = new IndicatorViewPager(indicator,viewPager);
         indicatorViewPager.setAdapter(new MyAdapter(getActivity().getSupportFragmentManager(),getContext()));
         add_date = (ImageView)view.findViewById(R.id.add_date);
-
+        requestDateReceiver = new RequestDateReceiver();
+        localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.hqb98.mj.activity.requestdate");
+        localBroadcastManager.registerReceiver(requestDateReceiver,intentFilter);
     }
 
     private void initEvent() {
         add_date.setOnClickListener(this);
+
     }
 
     int i;
@@ -201,8 +279,37 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
                 builder.create().show();
                 break;
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (resultCode==RESULT_OK){
+                    Bundle bundle = data.getExtras();
+                    String string = bundle.getString("Date_type");
 
+                    if (string.equals("记录心情")){
+                        viewPager.setCurrentItem(0);
+
+//                        Date_item_fragment_one.refreshDate();
+
+                        Date_item_fragment_one.refreshData1();
+                    }else if (string.equals("生活经验")){
+
+                        viewPager.setCurrentItem(1);
+                        Date_item_fragment_two.refreshData1();
+                    }else if (string.equals("课堂笔记")){
+                        viewPager.setCurrentItem(2);
+                        Date_item_fragment_three.refreshData1();
+                    }else if (string.equals("待办事项")){
+                        viewPager.setCurrentItem(3);
+                        Date_item_fragment_four.refreshData1();
+                    }
+
+                }
+                break;
+        }
     }
 
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
@@ -236,16 +343,20 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
             Fragment fragment;
             switch (position){
                 case 0:
-                    fragment = new Date_item_fragment();
+                    fragment1 = new Date_item_fragment_one();
+                    fragment = fragment1;
                     break;
                 case 1:
-                    fragment = new Date_item_fragment_two();
+                    fragment2 = new Date_item_fragment_two();
+                    fragment = fragment2;
                     break;
                 case 2:
-                    fragment = new Date_item_fragment_three();
+                    fragment3 = new Date_item_fragment_three();
+                    fragment = fragment3;
                     break;
                 case 3:
-                    fragment = new Date_item_fragment_four();
+                    fragment4 = new Date_item_fragment_four();
+                    fragment = fragment4;
                     break;
                     default:
                         return null;
@@ -255,4 +366,15 @@ public class DateFragmentOne extends Fragment implements View.OnClickListener {
             return fragment;
         }
     }
+
+    public class RequestDateReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            requestData();
+        }
+    }
+
+
+
 }
